@@ -1,26 +1,41 @@
-# weixin-framework-
+#coding=utf8
 
-封装了微信的基础操作，框架是使用django来做的，当然你可以换成任意的，核心功能都在目录weixin下
+from django.shortcuts import HttpResponse, render_to_response, redirect
+
+from .weixin import WeixinHelper
+from .weixin import handler as HD
 
 
-使用很方便
+def do(request):
+    """公众平台对接"""
+    signature = request.REQUEST.get("signature", "")
+    timestamp = request.REQUEST.get("timestamp", "")
+    nonce = request.REQUEST.get("nonce", "")
+    if not any([signature, timestamp, nonce]) or not WeixinHelper.checkSignature(signature, timestamp, nonce):
+        return HttpResponse("")
+
+    if request.method == "GET":
+        return HttpResponse(request.GET.get("echostr"))
+    elif request.method == "POST":
+        handler = HD.MessageHandle(request.raw_post_data)
+        response = handler.start()
+        return HttpResponse(response)
+    else:
+        return HttpResponse("")
 
 
 @HD.subscribe
 def subscribe(xml):
-    """关注事件"""
     return "welcome to brain"
 
 @HD.unsubscribe
 def subscribe(xml):
-    """取关事件"""
     print "leave"
     return "leave  brain"
 
 
 @HD.text
 def text(xml):
-    """文本消息"""
     content = xml.Content
     if content == "111":
         return {"Title":"美女", "Description":"比基尼美女", "PicUrl":"http://9smv.com/static/mm/uploads/150411/2-150411115450247.jpg", "Url":"http://9smv.com/beauty/list?category=5"}
@@ -30,3 +45,11 @@ def text(xml):
             ["长腿美女", "长腿美女", "http://9smv.com/static/mm/uploads/150506/2-150506111A9648.jpg", "http://9smv.com/beauty/list?category=8"]
         ]
     return "hello world"
+
+
+
+
+
+
+
+
