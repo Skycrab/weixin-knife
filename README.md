@@ -29,3 +29,8 @@
             ["长腿美女", "长腿美女", "http://9smv.com/static/mm/uploads/150506/2-150506111A9648.jpg", "http://9smv.com/beauty/list?category=8"]
             ]
         return "hello world"
+
+    @sns_userinfo
+    def oauth(request):
+        """网页授权获取用户信息"""
+        return HttpResponse(request.openid)
