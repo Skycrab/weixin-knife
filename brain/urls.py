@@ -21,5 +21,4 @@ urlpatterns = patterns('',
     url(r'^wxpay/', 'question.views.pay'),
     url(r'^paydetail', 'question.views.paydetail'),
     url(r'^payback', 'question.views.payback'),
-    url(r'^setcookie', 'question.views.payback'),
 )
