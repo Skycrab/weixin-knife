@@ -16,5 +16,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^do$', 'question.views.do'),
     url(r'^oauth', 'question.views.oauth'),
-
+    url(r'^share', 'question.views.share'),
+    url(r'^pay/', 'question.views.pay'),
+    url(r'^wxpay/', 'question.views.pay'),
+    url(r'^paydetail', 'question.views.paydetail'),
+    url(r'^payback', 'question.views.payback'),
+    url(r'^setcookie', 'question.views.payback'),
 )

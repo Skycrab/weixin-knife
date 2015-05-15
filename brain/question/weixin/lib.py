@@ -5,6 +5,9 @@ Created on 2014-5-13
 @author: skycrab
 '''
 import json
+import time
+import random
+import string
 import urllib
 import urllib2
 import hashlib
@@ -149,6 +152,10 @@ class WeixinHelper(object):
         code = hashlib.sha1("".join(tmp)).hexdigest()
         return code == signature
 
+    @classmethod
+    def nonceStr(cls, length):
+        """随机数"""
+        return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
 
     @classmethod
     def xmlToArray(cls, xml):
@@ -227,6 +234,30 @@ class WeixinHelper(object):
             }
         }
         return cls.send(data, access_token)
+
+    @classmethod
+    def getJsapiTicket(cls, access_token):
+        """获取jsapi_tocket
+        """
+        _JSAPI_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type=jsapi"
+        return HttpClient().get(_JSAPI_URL.format(access_token))
+
+
+    @classmethod
+    def jsapiSign(cls, jsapi_ticket, url):
+        """jsapi_ticket 签名"""
+        sign = {
+            'nonceStr': cls.nonceStr(15),
+            'jsapi_ticket': jsapi_ticket,
+            'timestamp': int(time.time()),
+            'url': url
+        }
+        signature = '&'.join(['%s=%s' % (key.lower(), sign[key]) for key in sorted(sign)])
+        sign["signature"] = hashlib.sha1(signature).hexdigest()
+        return sign
+
+
+
 
 
 

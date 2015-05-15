@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>JSSDK-自定义分享</title>
+</head>
+<body>
+  
+</body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+  //alert(location.href.split('#')[0])
+  wx.config({
+      debug: true,
+      appId: '{{jsapi.appId}}',
+      timestamp: {{jsapi.timestamp}},
+      nonceStr: '{{jsapi.nonceStr}}',
+      signature: '{{jsapi.signature}}',
+      jsApiList: [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo'
+      ]
+  });
+  wx.ready(function () {
+    var ss = {
+      title: '自定义分享',
+      link: 'http://9smv.com/beauty/category',
+      imgUrl: 'http://www.mmonly.cc/uploads/150508/2-15050Q64J6296.jpg',
+      trigger: function (res) {
+        alert('用户点击分享到朋友圈');
+      },
+      success: function (res) {
+        alert('已分享');
+      },
+      cancel: function (res) {
+        alert('已取消');
+      },
+      fail: function (res) {
+        alert(res);
+      }
+    }
+    wx.onMenuShareTimeline(ss);
+    
+    wx.onMenuShareAppMessage(ss);
+  });
+</script>
+</html>

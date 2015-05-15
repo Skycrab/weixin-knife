@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>砖石充值</title>
+<link rel="stylesheet" type="text/css" href="http://www.heisita.com/static/styles/dzz.css">
+<script type="text/javascript" src="http://www.heisita.com/static/js/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+   <div class="top">砖石充值</div>
+   <div class="info">
+           <p class="zhanghao">w大神</p>
+           <p class="yue">余额：<span>100</span>砖石</p>
+   </div>
+   <div class="content">
+       <div>
+           <div class="yuanbao fl"><span>100</span>砖石</div>
+           <div class="yuanbao fr"><span>200</span>砖石</div>
+           <div class="yuanbao fl"><span>300</span>砖石</div>
+           <div class="yuanbao fr"><span>500</span>砖石</div>
+           <div class="yuanbao fl"><span>1000</span>砖石</div>
+           <div class="other fr">
+              <input type="text" placeholder="其他" value="">
+           </div>
+       </div>
+       <div class="jiage">
+           <p class="jieguo"><span class="qianshu">0</span>元<span class="zhekou">（<span class="zk">1<span>折）</span></p>
+           <input type="button" value="立即充值" class="chongzhi" id="chongzhi">
+       </div>
+       <div class="zhushi">
+           <p>砖石作用：</p>
+           <p>1.购买商城高级技能</p>
+       </div>
+   </div>
+</div>
+<script>
+$(function(){
+  var $yuanbao=$(".yuanbao");
+  var $other=$(".other input");
+  var $qianshu=$(".qianshu");
+  var $zk=$(".zk");
+  var $cz=$(".chongzhi");
+  var checknum = function(ot){
+    if(parseInt(ot) != ot || ot <1){
+      alert("砖石必须是正整数");
+    }
+  };
+  $yuanbao.click(function(){
+    var $yb=parseFloat($(this).children("span").text());
+    var $zhe=parseFloat($zk.text());
+      $qianshu.text($yb*$zhe*0.1);
+    });
+  $other.blur(function(){
+    var $ot=$(this).val();
+    checknum($ot);
+    var $zhee=parseFloat($zk.text());
+    var $momey = parseFloat($ot*$zhee*0.1).toFixed(2);
+    if(isNaN($momey)){
+      $momey = 0.00;
+    }
+    $qianshu.text($momey);
+    });
+
+  function pay(){
+    $momey = parseFloat($qianshu.text());
+    if($momey < 0.1){
+      alert("请选择充值砖石数量");
+      return;
+    }
+    $.post("/paydetail",{
+      money: $momey
+      },function(data){
+        if(data){
+          var jsonobj = eval('('+data+')');
+          WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                 "appId" : jsonobj.appId, //公众号名称，由商户传入
+                 "timeStamp" : jsonobj.timeStamp, //时间戳
+                 "nonceStr" : jsonobj.nonceStr, //随机串
+                 "package" : jsonobj.package,//扩展包
+                 "signType" : "MD5", //微信签名方式:1.sha1
+                 "paySign" : jsonobj.paySign //微信签名
+                 });
+        }
+      }
+    );
+  }
+
+  $cz.click(function(){
+    setTimeout(pay, 100);      
+  });
+
+  });
+</script>
+</body>
+</html>
