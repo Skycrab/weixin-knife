@@ -34,3 +34,6 @@
     def oauth(request):
         """网页授权获取用户信息"""
         return HttpResponse(request.openid)
+
+
+    新增jssdk, 微信支付，具体demo看views.py
