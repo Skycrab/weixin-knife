@@ -1,6 +1,6 @@
 # weixin-framework-
 
-封装了微信的基础操作，框架是使用django来做的，当然你可以换成任意的，核心功能都在目录weixin下
+封装了微信的基础操作，框架是使用django来做的，当然你可以换成其它的，核心功能都在目录weixin下
 
 
 使用很方便, 很简单
@@ -36,4 +36,4 @@
         return HttpResponse(request.openid)
 
 
-    新增jssdk, 微信支付，具体demo看views.py
+    新增jssdk(案列自定义分享), 微信支付，具体demo看views.py
