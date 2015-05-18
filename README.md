@@ -1,6 +1,6 @@
-# weixin-framework-
+# weixin-knife 微信开发利器---微信瑞士小刀
 
-封装了微信的基础操作，框架是使用django来做的，当然你可以换成其它的，核心功能都在目录weixin下
+封装了微信的基础操作，demo使用了django，当然你可以换成其它的，核心功能都在目录weixin下
 
 
 使用很方便, 很简单
@@ -8,13 +8,13 @@
     @HD.subscribe
     def subscribe(xml):
         """关注事件"""
-        return "welcome to brain"
+        return "welcome to weixin-knife"
 
     @HD.unsubscribe
     def subscribe(xml):
         """取关事件"""
-        print "leave"
-        return "leave  brain"
+        print "leave weixin-knife"
+        return "leave"
 
 
     @HD.text
@@ -36,4 +36,4 @@
         return HttpResponse(request.openid)
 
 
-    新增jssdk(案列自定义分享), 微信支付，具体demo看views.py
+    新增jssdk(案列自定义分享), 微信支付，具体看demo
