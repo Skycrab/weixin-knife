@@ -1,6 +1,6 @@
 # weixin-knife 微信开发利器---微信瑞士小刀
 
-封装了微信的基础操作，demo使用了django，当然你可以换成其它的，核心功能都在目录weixin下
+封装了微信的基础操作，demo使用了django，核心功能都在目录weixin下
 
 
 使用很方便, 很简单
