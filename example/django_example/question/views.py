@@ -2,9 +2,9 @@
 import time
 from django.shortcuts import HttpResponse, render_to_response, redirect
 
-from .weixin import handler as HD
-from .helper import *
-from .weixin import WeixinHelper, JsApi_pub, WxPayConf_pub, UnifiedOrder_pub, Notify_pub
+from weixin import handler as HD
+from weixin.backends.dj import *
+from weixin import WeixinHelper, JsApi_pub, WxPayConf_pub, UnifiedOrder_pub, Notify_pub, catch
 
 
 
@@ -133,7 +133,7 @@ def payback(request):
         else:
             notify.setReturnParameter("return_code", SUCCESS)
             out_trade_no = result["out_trade_no"] #商户系统的订单号，与请求一致。
-            ###检查订单号是否已存在,以及业务代码
+            ###检查订单号是否已存在,以及业务代码(业务代码注意重入问题)
 
     return  HttpResponse(notify.returnXml())
 

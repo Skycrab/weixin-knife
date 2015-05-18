@@ -25,10 +25,6 @@ class WxPayConf_pub(object):
     #异步通知url，商户根据实际开发过程设定
     NOTIFY_URL = "http://******.com/payback"
 
-    #=======【JSAPI路径设置】===================================
-    #获取access_token过程中的跳转uri，通过跳转将code传入jsapi支付页面
-    JS_API_CALL_URL = "http://******.com/pay/?showwxpaytitle=1"
-
     #=======【证书路径设置】=====================================
     #证书路径,注意应该填写绝对路径
     SSLCERT_PATH = "/******/cacert/apiclient_cert.pem"

@@ -12,6 +12,7 @@ import urllib
 import urllib2
 import hashlib
 import threading
+from functools import wraps
 import xml.etree.ElementTree as ET
 
 from .config import WxPayConf_pub
@@ -22,6 +23,15 @@ try:
 except ImportError:
     pycurl = None
 
+def catch(func):
+    @wraps(func)
+    def wrap(*args,**kwargs):
+        try:
+            return func(*args,**kwargs)
+        except Exception as e:
+            print(traceback.format_exc())
+            return None
+    return wrap
 
 class ObjectDict(dict):
     """Makes a dictionary behave like an object, with attribute-style access.
@@ -37,7 +47,7 @@ class ObjectDict(dict):
 
 
 class Singleton(object):
-    """单例模式"""
+    """可配置单例模式"""
 
     _instance_lock = threading.Lock()
 

@@ -1,6 +1,7 @@
 #coding=utf8
 '''
 Created on 2014-5-14
+django 帮助函数
 
 @author: skycrab
 '''
@@ -13,17 +14,7 @@ from django.core.cache import cache
 from django.shortcuts import redirect
 
 
-from .weixin import WeixinHelper, class_property
-
-def catch(func):
-    @wraps(func)
-    def wrap(*args,**kwargs):
-        try:
-            return func(*args,**kwargs)
-        except Exception as e:
-            print(traceback.format_exc())
-            return None
-    return wrap
+from .. import WeixinHelper, class_property
 
 
 class Helper(object):

@@ -1,8 +1,11 @@
 # Django settings for brain project.
 
 import sys
+from os.path import dirname
 reload(sys)
 sys.setdefaultencoding("utf8")
+sys.path.append(dirname(dirname(dirname(__file__))))
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -108,7 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'brain.urls'
+ROOT_URLCONF = 'django_example.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -127,7 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'brain.question',
+    'django_example.question',
 
 )
 
