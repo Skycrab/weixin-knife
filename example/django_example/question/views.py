@@ -3,7 +3,7 @@ import time
 from django.shortcuts import HttpResponse, render_to_response, redirect
 
 from weixin import handler as HD
-from weixin.backends.dj import *
+from weixin.backends.dj import Helper, sns_userinfo
 from weixin import WeixinHelper, JsApi_pub, WxPayConf_pub, UnifiedOrder_pub, Notify_pub, catch
 
 
@@ -14,7 +14,7 @@ def do(request):
     timestamp = request.REQUEST.get("timestamp", "")
     nonce = request.REQUEST.get("nonce", "")
     if not any([signature, timestamp, nonce]) or not WeixinHelper.checkSignature(signature, timestamp, nonce):
-        return HttpResponse("")
+        return HttpResponse("check failed")
 
     if request.method == "GET":
         return HttpResponse(request.GET.get("echostr"))

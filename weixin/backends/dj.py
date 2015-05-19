@@ -4,73 +4,35 @@ Created on 2014-5-14
 django 帮助函数
 
 @author: skycrab
+
+@sns_userinfo
+def oauth(request):
+    openid = request.openid
+
 '''
-import hmac
 import json
-import traceback
 from functools import wraps
 from django.conf import settings
 from django.core.cache import cache
 from django.shortcuts import redirect
 
+from .common import CommonHelper
+from .. import class_property, WeixinHelper
 
-from .. import WeixinHelper, class_property
 
-
-class Helper(object):
+class Helper(CommonHelper):
     """微信具体逻辑帮组类"""
 
     @class_property
-    def access_token(cls):
-        key = "ACCESS_TOKEN"
-        token = cache.get(key)
-        if not token:
-            data = json.loads(WeixinHelper.getAccessToken())
-            token, expire = data["access_token"], data["expires_in"]
-            cache.set(key, token, expire-300)
-        return token
+    def cache(cls):
+        """返回cache对象"""
+        return cache
 
     @class_property
-    def jsapi_ticket(cls):
-        key = "JSAPI_TICKET"
-        ticket = cache.get(key)
-        if not ticket:
-            data = json.loads(WeixinHelper.getJsapiTicket(cls.access_token))
-            ticket, expire = data["ticket"], data["expires_in"]
-            cache.set(key, ticket, expire-300)
-        return ticket
+    def secret_key(cls):
+        """返回cookie加密秘钥"""
+        return settings.SECRET_KEY
 
-    @classmethod
-    def hmac_sign(cls, key):
-        return hmac.new(settings.SECRET_KEY, key).hexdigest()
-
-    @classmethod
-    def sign_cookie(cls, key):
-        """cookie签名"""
-        return "{0}|{1}".format(key, cls.hmac_sign(key))
-
-    @classmethod
-    def check_cookie(cls, value):
-        """验证cookie
-        成功返回True, key
-        """
-        code = value.split("|", 1)
-        if len(code) != 2:
-            return False, None
-        key, signature = code
-        if cls.hmac_sign(key) != signature:
-            return False, None
-        return True, key
-
-    @classmethod
-    def send_text_message(cls, openid, message):
-        """客服主动推送消息"""
-        return WeixinHelper.sendTextMessage(openid, message, cls.access_token)
-
-    @classmethod
-    def jsapi_sign(cls, url):
-        """jsapi_ticket 签名"""
-        return WeixinHelper.jsapiSign(cls.jsapi_ticket, url)
 
 
 def sns_userinfo_callback(callback=None):
@@ -107,6 +69,7 @@ def sns_userinfo_callback(callback=None):
     return wrap
 
 sns_userinfo = sns_userinfo_callback()
+
 
 
 
