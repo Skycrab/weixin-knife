@@ -468,7 +468,7 @@ class NativeLink_pub(Common_util_pub):
         self.parameters["time_stamp"] = "{0}".format(time_stamp)  #时间戳
         self.parameters["nonce_str"] = self.createNoncestr()  #随机字符串
         self.parameters["sign"] = self.getSign(self.parameters)  #签名          
-        bizString = self.formatBizQueryParaMap(self.parameters, false)
+        bizString = self.formatBizQueryParaMap(self.parameters, False)
         self.url = "weixin://wxpay/bizpayurl?"+bizString
 
     def getUrl(self):
