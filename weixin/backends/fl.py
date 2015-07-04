@@ -18,6 +18,9 @@ import json
 from functools import wraps
 from flask import request, redirect, g
 
+from .. import WeixinHelper
+from .common import CommonHelper
+
 def sns_userinfo_callback(callback=None):
     """网页授权获取用户信息装饰器
     callback(openid, userinfo):
@@ -38,7 +41,7 @@ def sns_userinfo_callback(callback=None):
                     #WeixinHelper.refreshAccessToken(refresh_token)
                     userinfo = json.loads(WeixinHelper.getSnsapiUserInfo(access_token, openid))
             else:
-                ok, openid = Helper.check_cookie(openid)
+                ok, openid = CommonHelper.check_cookie(openid)
                 if not ok:
                     return redirect("/")
             g.openid = openid

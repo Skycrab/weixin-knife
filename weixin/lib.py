@@ -12,8 +12,10 @@ import urllib
 import urllib2
 import hashlib
 import threading
-from functools import wraps
+import traceback
 import xml.etree.ElementTree as ET
+
+from functools import wraps
 
 from .config import WxPayConf_pub
 
