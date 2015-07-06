@@ -25,6 +25,11 @@ try:
 except ImportError:
     pycurl = None
 
+try:
+    import requests
+except ImportError:
+    requests = None
+
 def catch(func):
     @wraps(func)
     def wrap(*args,**kwargs):
@@ -88,40 +93,43 @@ class class_property(object):
         value = self.func(type)
         return value
 
-
-
-class UrllibClient(object):
-    """使用urlib2发送请求"""
+class BaseHttpClient(object):
+    include_ssl = False
 
     def get(self, url, second=30):
-        return self.postXml(None, url, second)
+        if self.include_ssl:
+            return self.postXmlSSL(None, url, second, False, False)
+        else:
+            return self.postXml(None, url, second)
 
+    def postXml(self, xml, url, second=30):
+        if self.include_ssl:
+            return self.postXmlSSL(xml, url, second, cert=False)
+        else:
+            raise NotImplementedError("please implement postXML")
+
+    def postXmlSSL(self, xml, url, second=30, cert=True, post=True):
+        raise NotImplementedError("please implement postXMLSSL")
+
+
+class UrllibClient(BaseHttpClient):
+    """使用urlib2发送请求"""
     def postXml(self, xml, url, second=30):
         """不使用证书"""
         data = urllib2.urlopen(url, xml, timeout=second).read()
         return data
 
-    def postXmlSSL(self, xml, url, second=30):
-        """使用证书"""
-        raise TypeError("please use CurlClient")
 
-
-class CurlClient(object):
+class CurlClient(BaseHttpClient):
     """使用Curl发送请求"""
+    include_ssl = True
+
     def __init__(self):
         self.curl = pycurl.Curl()
         self.curl.setopt(pycurl.SSL_VERIFYHOST, False)
         self.curl.setopt(pycurl.SSL_VERIFYPEER, False)
         #设置不输出header
         self.curl.setopt(pycurl.HEADER, False)
-
-    def get(self, url, second=30):
-        return self.postXmlSSL(None, url, second=second, cert=False, post=False)
-
-    def postXml(self, xml, url, second=30):
-        """不使用证书"""
-        return self.postXmlSSL(xml, url, second=second, cert=False, post=True)
-        
 
     def postXmlSSL(self, xml, url, second=30, cert=True, post=True):
         """使用证书"""
@@ -146,12 +154,38 @@ class CurlClient(object):
         return buff.getvalue()
 
 
-class HttpClient(Singleton):
+class RequestsClient(BaseHttpClient):
+    include_ssl = True
+
+    def postXmlSSL(self, xml, url, second=30, cert=True, post=True):
+        if cert:
+            cert_config = (WxPayConf_pub.SSLCERT_PATH, WxPayConf_pub.SSLKEY_PATH)
+        else:
+            cert_config = None
+        if post:
+            res = requests.post(url, data=xml, second=30, cert=cert_config)
+        else:
+            res = requests.get(url, timeout=second, cert=cert_config)
+        return res.content
+
+class HttpClient(Singleton, BaseHttpClient):
     @classmethod
     def configure(cls):
-        if pycurl is not None and WxPayConf_pub.HTTP_CLIENT != "URLLIB":
+        config_client =  WxPayConf_pub.HTTP_CLIENT
+        client_cls = {"urllib": UrllibClient,
+                      "curl": CurlClient,
+                      "requests": RequestsClient}.get(config_client.lower(), None)
+        if client_cls:
+            return client_cls
+
+        if pycurl is not None:
+            print("HTTP_CLIENT config error, Use 'CURL'")
             return CurlClient
+        if requests is not None:
+            print("HTTP_CLIENT config error, Use 'REQUESTS'")
+            return RequestsClient
         else:
+            print("HTTP_CLIENT config error, Use 'URLLIB'")
             return UrllibClient
 
 
@@ -267,19 +301,3 @@ class WeixinHelper(object):
         signature = '&'.join(['%s=%s' % (key.lower(), sign[key]) for key in sorted(sign)])
         sign["signature"] = hashlib.sha1(signature).hexdigest()
         return sign
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

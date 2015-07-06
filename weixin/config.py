@@ -34,6 +34,6 @@ class WxPayConf_pub(object):
     CURL_TIMEOUT = 30
 
     #=======【HTTP客户端设置】===================================
-    HTTP_CLIENT = "CURL"  # ("URLLIB", "CURL")
+    HTTP_CLIENT = "CURL"  # ("URLLIB", "CURL", "REQUESTS")
 
 
