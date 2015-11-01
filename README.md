@@ -1,5 +1,7 @@
 # weixin-knife 微信开发利器---微信瑞士小刀
 
+QQ交流群： [513457064](http://jq.qq.com/?_wv=1027&amp;k=bMQ2uU) 
+
 封装了微信的基础操作，demo使用了django，核心功能都在目录weixin下
 
 
