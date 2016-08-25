@@ -2,6 +2,7 @@
 
 
 封装了微信的基础操作，demo使用了django，核心功能都在目录weixin下
+
 demo django版本比较老(1.3.7), 抱歉抱歉
 
 
