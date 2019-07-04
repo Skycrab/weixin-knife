@@ -25,11 +25,11 @@ demo django版本比较老(1.3.7), 抱歉抱歉
         """文本消息"""
         content = xml.Content
         if content == "111":
-            return {"Title":"美女", "Description":"比基尼美女", "PicUrl":"http://9smv.com/static/mm/uploads/150411/2-150411115450247.jpg", "Url":"http://9smv.com/beauty/list?category=5"}
+            return {"Title":"风景", "Description":"美景", "PicUrl":"http://9smv.com/static/mm/uploads/150411/2-150411115450247.jpg", "Url":"http://9smv.com/beauty/list?category=5"}
         elif content == "222":
             return [
-                ["比基尼美女", "比基尼美女", "http://9smv.com/static/mm/uploads/150411/2-150411115450247.jpg", "http://9smv.com/beauty/list?category=5"],
-            ["长腿美女", "长腿美女", "http://9smv.com/static/mm/uploads/150506/2-150506111A9648.jpg", "http://9smv.com/beauty/list?category=8"]
+                ["壁纸", "桌面", "http://9smv.com/static/mm/uploads/150411/2-150411115450247.jpg", "http://9smv.com/beauty/list?category=5"],
+            ["壁纸", "手机", "http://9smv.com/static/mm/uploads/150506/2-150506111A9648.jpg", "http://9smv.com/beauty/list?category=8"]
             ]
         return "hello world"
 
